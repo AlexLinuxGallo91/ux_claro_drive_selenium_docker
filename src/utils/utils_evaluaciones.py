@@ -138,6 +138,8 @@ class UtilsEvaluaciones:
                             'portal de Claro Drive'
 
         while tiempo_transcurrido < tiempo_de_espera:
+            # en cada iteracion espera al menos un segundo
+            time.sleep(1)
             tiempo_transcurrido = Temporizador.obtener_tiempo_timer() - tiempo_de_inicio
             modal_de_exito = webdriver.find_elements_by_xpath('//div[@class="up-file-actions isDone"]')
 
