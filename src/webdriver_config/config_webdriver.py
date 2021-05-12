@@ -107,6 +107,7 @@ class ConfiguracionWebDriver:
         opciones_chrome.add_argument("--enable-javascript")
         opciones_chrome.add_argument('window-size=1920x1080')
         opciones_chrome.add_argument('--no-sandbox')
+        opciones_chrome.add_argument('--disable-dev-shm-usage')
 
         # establece el modo headless, esto dependiendo de la opcion que se tenga en el archivo config.ini
         if modo_headless:
