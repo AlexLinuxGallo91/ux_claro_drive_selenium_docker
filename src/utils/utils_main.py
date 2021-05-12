@@ -16,7 +16,19 @@ class UtilsMain:
 
     @staticmethod
     def obtener_lista_ficheros_en_directorio(path_directorio):
-        return [archivo for archivo in listdir(path_directorio) if isfile(join(path_directorio, archivo))]
+        lista_ficheros = listdir(path_directorio)
+        lista_archivos = []
+
+        # return [archivo for archivo in listdir(path_directorio) if isfile(join(path_directorio, archivo))]
+
+        for archivo in lista_ficheros:
+            try:
+                if isfile(join(path_directorio, archivo)):
+                    lista_archivos.append(archivo)
+            except PermissionError:
+                pass
+
+        return lista_archivos
 
     @staticmethod
     def generar_cadena_alafanumerica_aleatoria(longitud_cadena):
