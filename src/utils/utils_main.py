@@ -1,5 +1,5 @@
-from os import listdir, mkdir, umask
-from os.path import isdir, isfile, join
+from os import listdir, mkdir, umask, rename
+from os.path import isdir, isfile, join, getmtime
 from src.utils.utils_format import FormatUtils
 from pathlib import Path
 import shutil
@@ -20,7 +20,6 @@ class UtilsMain:
         lista_archivos = []
 
         # return [archivo for archivo in listdir(path_directorio) if isfile(join(path_directorio, archivo))]
-
         for archivo in lista_ficheros:
             try:
                 if isfile(join(path_directorio, archivo)):
@@ -29,6 +28,21 @@ class UtilsMain:
                 pass
 
         return lista_archivos
+
+    @staticmethod
+    def obtener_lista_folders_en_directorio(path_directorio):
+        lista_ficheros = listdir(path_directorio)
+        lista_folders = []
+
+        # return [archivo for archivo in listdir(path_directorio) if isfile(join(path_directorio, archivo))]
+        for archivo in lista_ficheros:
+            try:
+                if isdir(join(path_directorio, archivo)):
+                    lista_folders.append(archivo)
+            except PermissionError:
+                pass
+
+        return lista_folders
 
     @staticmethod
     def generar_cadena_alafanumerica_aleatoria(longitud_cadena):
@@ -59,6 +73,11 @@ class UtilsMain:
         try:
             umask(0)
             mkdir(path_directorio_por_crear)
+            rename(path_directorio_por_crear, path_directorio_por_crear)
+        except NotADirectoryError as e:
+            print('Sucedio un error al intentar crear el directorio {}: {}'.format(path_directorio_por_crear, e))
+        except IsADirectoryError as e:
+            print('Sucedio un error al intentar crear el directorio {}: {}'.format(path_directorio_por_crear, e))
         except OSError as e:
             print('Sucedio un error al intentar crear el directorio {}: {}'.format(path_directorio_por_crear, e))
 
@@ -66,6 +85,17 @@ class UtilsMain:
     def eliminar_directorio_con_contenido(path_directorio_por_borrar):
         shutil.rmtree(path=path_directorio_por_borrar, ignore_errors=True)
 
+    @staticmethod
+    def depurar_carpeta_de_descargas(path_carpeta_descargas:str, segundos_a_verificar:int = 7200):
 
+        lista_carpetas_por_eliminar = UtilsMain.obtener_lista_folders_en_directorio(path_carpeta_descargas)
+        fecha_actual = datetime.datetime.now()
 
+        for directorio in lista_carpetas_por_eliminar:
+            abs_path_directorio = join(path_carpeta_descargas, directorio)
+            date_timestap = getmtime(abs_path_directorio)
+            fecha_archivo = datetime.datetime.fromtimestamp(date_timestap)
+            diferencia_segundos = (fecha_actual - fecha_archivo).seconds
 
+            if diferencia_segundos > segundos_a_verificar:
+                UtilsMain.eliminar_directorio_con_contenido(abs_path_directorio)

@@ -212,6 +212,9 @@ def main():
     # webdriver_ux_test.set_window_position(0, 0)
     # webdriver_ux_test.set_window_size(1366, 768)
 
+    # inicia depuracion de descargas antiguas
+    UtilsMain.depurar_carpeta_de_descargas(param_archivo_config_directorio_descargas)
+
     resultado_json_evaluacines_ux_claro_drive = ejecucion_validaciones_claro_drive(webdriver_ux_test,
                                                                                    argumento_script_json)
 
