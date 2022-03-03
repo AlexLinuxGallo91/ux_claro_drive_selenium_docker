@@ -1,3 +1,5 @@
+import time
+
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.common.exceptions import ElementNotInteractableException
 from selenium.common.exceptions import InvalidArgumentException
@@ -42,7 +44,7 @@ class EvaluacionesClaroDriveSteps:
             json_eval = UtilsEvaluaciones.establecer_output_status_step(json_eval, 0, 0, False, msg_output)
 
         except NoSuchElementException as e:
-            msg_output = const_claro_drive.MSG_OUTPUT_INGRESO_PAGINA_PRINCIPAL_SIN_EXITO.\
+            msg_output = const_claro_drive.MSG_OUTPUT_INGRESO_PAGINA_PRINCIPAL_SIN_EXITO. \
                 format(e.msg)
 
             json_eval = UtilsEvaluaciones.establecer_output_status_step(json_eval, 0, 0, False, msg_output)
@@ -170,6 +172,10 @@ class EvaluacionesClaroDriveSteps:
             HtmlActions.webdriver_wait_presence_of_element_located(
                 webdriver_test_ux, 180, class_name=const_claro_drive.CARGA_ARCHIVO_CLASS_NAME_FILE_NAME_READER)
 
+            ## NUEVO ELEMENTO A DOCUMENTAR
+            HtmlActions.webdriver_wait_presence_of_element_located(
+                webdriver_test_ux, 18, id='quota-wrapper')
+
             input_file = HtmlActions.webdriver_wait_presence_of_element_located(
                 webdriver_test_ux, 20, id=const_claro_drive.CARGA_ARCHIVO_ID_INPUT_FILE_START)
 
@@ -248,8 +254,10 @@ class EvaluacionesClaroDriveSteps:
             input_busqueda = HtmlActions.webdriver_wait_element_to_be_clickable(
                 webdriver_test_ux, 20, id=const_claro_drive.DESCARGA_ARCHIVO_ID_SEARCH_BOX)
 
-            HtmlActions.enviar_data_keys(
-                input_busqueda, nombre_completo_de_la_imagen, id=const_claro_drive.DESCARGA_ARCHIVO_ID_SEARCH_BOX)
+            for character in nombre_completo_de_la_imagen:
+                HtmlActions.enviar_data_keys(
+                    input_busqueda, character, id=const_claro_drive.DESCARGA_ARCHIVO_ID_SEARCH_BOX)
+                time.sleep(.25)
 
             HtmlActions.enviar_data_keys(
                 input_busqueda, Keys.RETURN, id=const_claro_drive.DESCARGA_ARCHIVO_ID_SEARCH_BOX)
@@ -334,18 +342,15 @@ class EvaluacionesClaroDriveSteps:
 
             HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
 
-            boton_borrar_archivo = HtmlActions.webdriver_wait_presence_of_element_located(
+            boton_borrar_archivo = HtmlActions.webdriver_wait_element_to_be_clickable(
                 webdriver_test_ux, 10, xpath='//input[@class="menuItem svg deleteImage icon-delete icon-32"]')
 
             HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
 
+            UtilsEvaluaciones.click_btn_eliminar_archivo(boton_borrar_archivo)
+
             tiempo_step_inicio = Temporizador.obtener_tiempo_timer()
-
-            HtmlActions.click_html_element(
-                boton_borrar_archivo, xpath='//input[@class="menuItem svg deleteImage icon-delete icon-32"]')
-
             UtilsEvaluaciones.esperar_aparicion_modal_de_exito(webdriver_test_ux)
-            #UtilsEvaluaciones.esperar_desaparicion_modal_exito(webdriver_test_ux)
 
             json_eval = UtilsEvaluaciones.establecer_output_status_step(
                 json_eval, 4, 0, True, const_claro_drive.MSG_OUTPUT_BORRADO_ARCHIVO_EXITOSO)

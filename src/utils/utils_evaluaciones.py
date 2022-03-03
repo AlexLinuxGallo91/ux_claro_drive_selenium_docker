@@ -1,6 +1,6 @@
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.remote.webdriver import WebDriver, WebElement
 
 import src.validaciones_json.constantes_json as contantes_json
 from src.utils.utils_format import FormatUtils
@@ -77,11 +77,14 @@ class UtilsEvaluaciones:
         archivo_a_localizar = '{}{}'.format(nombre_del_archivo, extension_del_archivo)
 
         while (Temporizador.obtener_tiempo_timer() - tiempo_inicio) < 180:
-            lista_archivos = UtilsMain.obtener_lista_ficheros_en_directorio(config_constantes.PATH_CARPETA_DESCARGA)
+            try:
+                lista_archivos = UtilsMain.obtener_lista_ficheros_en_directorio(config_constantes.PATH_CARPETA_DESCARGA)
 
-            if archivo_a_localizar in lista_archivos:
-                se_descargo_el_archivo_exitosamente = True
-                break
+                if archivo_a_localizar in lista_archivos:
+                    se_descargo_el_archivo_exitosamente = True
+                    break
+            except PermissionError:
+                continue
 
         if not se_descargo_el_archivo_exitosamente:
             raise TimeoutException(msg='Han transcurrido 3 minutos sin finalizar la descarga del archivo {} desde '
@@ -166,5 +169,20 @@ class UtilsEvaluaciones:
             UtilsEvaluaciones.esperar_desaparicion_modal_exito(webdriver)
         else:
             raise TimeoutException(msg=mensaje_exception)
+
+    @staticmethod
+    def click_btn_eliminar_archivo(boton_de_borrado: WebElement, numero_de_intentos_clicks: int = 10):
+        num_intentos = 0
+
+        while num_intentos < numero_de_intentos_clicks:
+            try:
+                HtmlActions.click_html_element(
+                    boton_de_borrado, xpath='//input[@class="menuItem svg deleteImage icon-delete icon-32"]')
+                break
+            except ElementClickInterceptedException:
+                pass
+
+            num_intentos = num_intentos + 1
+            time.sleep(.2)
 
 
