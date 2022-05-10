@@ -64,7 +64,7 @@ CARGA_ARCHIVO_CLASS_NAME_UP_CLOSE = 'up-close'
 
 # descarga_archivo_claro_drive
 
-DESCARGA_ARCHIVO_ID_SEARCH_BOX = 'searchbox'
+DESCARGA_ARCHIVO_ID_SEARCH_BOX = 'Search'
 DESCARGA_ARCHIVO_CLASS_NAME_RESULT = 'result'
 DESCARGA_ARCHIVO_XPATH_ARCHIVO_POR_DESCARGAR = '//span[@class="name-without-extension"][text()="{} "]'
 DESCARGA_ARCHIVO_CLASS_NAME_FILENAME = 'filename'

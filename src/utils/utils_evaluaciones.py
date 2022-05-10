@@ -91,19 +91,6 @@ class UtilsEvaluaciones:
                                        'el portal Claro Drive'.format(archivo_a_localizar))
 
     @staticmethod
-    def establecer_vista_de_archivos_como_lista(webdriver: WebDriver):
-
-        boton_vista = webdriver.find_element_by_xpath('//div[@class="icon view-toggle"]')
-        tool_tip = boton_vista.find_element_by_class_name('amx-tooltip')
-        tool_tip = tool_tip.get_attribute('innerHTML')
-        tool_tip = tool_tip.strip()
-
-        if tool_tip == 'Vista lista':
-            HtmlActions.webdriver_wait_until_not_presence_of_element_located(
-                webdriver, 15, xpath='//div[@class="row type-success"]')
-            boton_vista.click()
-
-    @staticmethod
     def esperar_aparicion_modal_de_exito(webdriver: WebDriver, tiempo_de_espera: int = 10):
 
         tiempo_de_inicio = Temporizador.obtener_tiempo_timer()
@@ -169,20 +156,5 @@ class UtilsEvaluaciones:
             UtilsEvaluaciones.esperar_desaparicion_modal_exito(webdriver)
         else:
             raise TimeoutException(msg=mensaje_exception)
-
-    @staticmethod
-    def click_btn_eliminar_archivo(boton_de_borrado: WebElement, numero_de_intentos_clicks: int = 10):
-        num_intentos = 0
-
-        while num_intentos < numero_de_intentos_clicks:
-            try:
-                HtmlActions.click_html_element(
-                    boton_de_borrado, xpath='//input[@class="menuItem svg deleteImage icon-delete icon-32"]')
-                break
-            except ElementClickInterceptedException:
-                pass
-
-            num_intentos = num_intentos + 1
-            time.sleep(.2)
 
 

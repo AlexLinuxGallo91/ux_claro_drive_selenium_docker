@@ -7,7 +7,6 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import WebDriverException
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webdriver import WebDriver
 
@@ -244,44 +243,45 @@ class EvaluacionesClaroDriveSteps:
             return json_eval
 
         try:
+            # verifica que ya no se presente una modal de exito, para no interrumpir los clics en el portal
             HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
 
-            UtilsEvaluaciones.establecer_vista_de_archivos_como_lista(webdriver_test_ux)
-
-            # establece el action para mover el mouse a un elemento html
-            action = ActionChains(webdriver_test_ux)
-
+            # busqueda del input o barra de busqueda
             input_busqueda = HtmlActions.webdriver_wait_element_to_be_clickable(
                 webdriver_test_ux, 20, id=const_claro_drive.DESCARGA_ARCHIVO_ID_SEARCH_BOX)
 
+            # se ingresa cada caracter a la barra de busqueda con un lapso de tiempo
             for character in nombre_completo_de_la_imagen:
                 HtmlActions.enviar_data_keys(
                     input_busqueda, character, id=const_claro_drive.DESCARGA_ARCHIVO_ID_SEARCH_BOX)
                 time.sleep(.25)
 
+            # se envia una tecla Enter, para que realice la busqueda del archivo
             HtmlActions.enviar_data_keys(
                 input_busqueda, Keys.RETURN, id=const_claro_drive.DESCARGA_ARCHIVO_ID_SEARCH_BOX)
 
-            HtmlActions.webdriver_wait_presence_of_element_located(
-                webdriver_test_ux, 20, class_name=const_claro_drive.DESCARGA_ARCHIVO_CLASS_NAME_RESULT)
+            # se establece un sleep de 5 segundos para que refresque la pantalla y muestre los
+            # archivos localizados
+            time.sleep(5)
 
-            archivo_localizado_por_descargar = HtmlActions.webdriver_wait_element_to_be_clickable(
-                webdriver_test_ux, 20, xpath=const_claro_drive.DESCARGA_ARCHIVO_XPATH_ARCHIVO_POR_DESCARGAR.format(
-                    nombre_archivo_sin_ext))
+            # localiza el archivo a descargar en el portal
+            archivo_localizado_por_descargar = HtmlActions.webdriver_wait_presence_of_element_located(
+                webdriver_test_ux, 20, class_name='filename')
 
+            # verifica que ya no se presente una modal de exito, para no interrumpir los clics en el portal
             HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
 
-            HtmlActions.click_html_element(
-                archivo_localizado_por_descargar, xpath=const_claro_drive.DESCARGA_ARCHIVO_XPATH_ARCHIVO_POR_DESCARGAR.
-                    format(nombre_archivo_sin_ext))
+            boton_sub_menu_actions = HtmlActions.webdriver_wait_presence_of_element_located(
+                archivo_localizado_por_descargar, 20, class_name='open-menu')
 
-            boton_descargar_archivo = HtmlActions.webdriver_wait_presence_of_element_located(
-                webdriver_test_ux, 10, xpath='//input[@class="menuItem svg downloadImage icon-download icon-32"]')
+            HtmlActions.click_html_element(boton_sub_menu_actions, class_name='open-menu')
+
+            boton_descargar = HtmlActions.webdriver_wait_presence_of_element_located(
+                boton_sub_menu_actions, 20, xpath='//li[@class="download action"]')
+
+            HtmlActions.click_html_element(boton_descargar, xpath='//li[@class="download action"]')
 
             HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
-
-            HtmlActions.click_html_element(
-                boton_descargar_archivo, xpath='//input[@class="menuItem svg downloadImage icon-download icon-32"]')
 
             tiempo_step_inicio = Temporizador.obtener_tiempo_timer()
 
@@ -342,16 +342,36 @@ class EvaluacionesClaroDriveSteps:
 
             HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
 
-            boton_borrar_archivo = HtmlActions.webdriver_wait_element_to_be_clickable(
-                webdriver_test_ux, 10, xpath='//input[@class="menuItem svg deleteImage icon-delete icon-32"]')
+            # localiza el archivo a eliminar en el portal
+            archivo_localizado_por_descargar = HtmlActions.webdriver_wait_presence_of_element_located(
+                webdriver_test_ux, 20, class_name='filename')
 
+            # verifica que ya no se presente una modal de exito, para no interrumpir los clics en el portal
             HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
 
-            UtilsEvaluaciones.click_btn_eliminar_archivo(boton_borrar_archivo)
+            # se localiza el boton de sub menu del archivo a borrar
+            boton_sub_menu_actions = HtmlActions.webdriver_wait_presence_of_element_located(
+                archivo_localizado_por_descargar, 20, class_name='open-menu')
 
+            # se realiza un clic en el boton del submenu
+            HtmlActions.click_html_element(boton_sub_menu_actions, class_name='open-menu')
+
+            # se busca el boton de eliminar, el cual contiene el submenu
+            boton_eliminar = HtmlActions.webdriver_wait_presence_of_element_located(
+                boton_sub_menu_actions, 20, xpath='//li[@class="delete action"]')
+
+            # se verifica que no este presente la modal de algun mensaje, para que no
+            # intervenga en el clic al boton de eliminar
+            HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
+
+            # se realiza un clic al boton de eliminar
+            HtmlActions.click_html_element(boton_eliminar, xpath='//li[@class="delete action"]')
+
+            # se empieza a tomar el tiempo de duracion de la eliminacion del archivo
             tiempo_step_inicio = Temporizador.obtener_tiempo_timer()
             UtilsEvaluaciones.esperar_aparicion_modal_de_exito(webdriver_test_ux)
 
+            # se establecen los resultados exitosos en el json
             json_eval = UtilsEvaluaciones.establecer_output_status_step(
                 json_eval, 4, 0, True, const_claro_drive.MSG_OUTPUT_BORRADO_ARCHIVO_EXITOSO)
 
