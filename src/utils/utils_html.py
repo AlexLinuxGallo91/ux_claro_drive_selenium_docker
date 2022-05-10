@@ -1,3 +1,5 @@
+import time
+
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -16,6 +18,8 @@ class ValidacionesHtml:
             WebDriverWait(webdriver_test_ux, 20).until(
                 EC.presence_of_element_located((By.ID, 'oc-dialog-fileexists-content')))
 
+            time.sleep(2)
+
             check_sustituir_archivos = WebDriverWait(webdriver_test_ux, 20).until(
                 EC.presence_of_element_located(
                     (By.XPATH, '//label[@for="checkbox-allnewfiles"][text()="Archivos Nuevos"]')))
@@ -25,7 +29,11 @@ class ValidacionesHtml:
             btn_continuar = WebDriverWait(webdriver_test_ux, 20).until(
                 EC.presence_of_element_located((By.XPATH, '//button[@class="continue"][text()="Continuar"]')))
 
+            time.sleep(1)
+
             btn_continuar.click()
+
+            time.sleep(2)
 
         except ElementNotInteractableException:
             pass

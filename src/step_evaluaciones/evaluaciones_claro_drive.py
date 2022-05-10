@@ -171,12 +171,10 @@ class EvaluacionesClaroDriveSteps:
             HtmlActions.webdriver_wait_presence_of_element_located(
                 webdriver_test_ux, 180, class_name=const_claro_drive.CARGA_ARCHIVO_CLASS_NAME_FILE_NAME_READER)
 
-            ## NUEVO ELEMENTO A DOCUMENTAR
-            HtmlActions.webdriver_wait_presence_of_element_located(
-                webdriver_test_ux, 18, id='quota-wrapper')
+            HtmlActions.webdriver_wait_presence_of_element_located(webdriver_test_ux, 35, id='quota-wrapper')
 
             input_file = HtmlActions.webdriver_wait_presence_of_element_located(
-                webdriver_test_ux, 20, id=const_claro_drive.CARGA_ARCHIVO_ID_INPUT_FILE_START)
+                webdriver_test_ux, 35, id=const_claro_drive.CARGA_ARCHIVO_ID_INPUT_FILE_START)
 
             HtmlActions.enviar_data_keys(
                 input_file, path_archivo_carga, id=const_claro_drive.CARGA_ARCHIVO_ID_INPUT_FILE_START)
