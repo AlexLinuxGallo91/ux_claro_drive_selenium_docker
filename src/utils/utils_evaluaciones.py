@@ -204,6 +204,8 @@ class UtilsEvaluaciones:
                             continue
                         except TimeoutException:
                             continue
+                        except ElementClickInterceptedException:
+                            continue
 
                     if numero_de_cancelaciones_de_descargas > 10:
                         se_cargo_correctamente_el_fichero = False
