@@ -105,11 +105,6 @@ class EvaluacionesClaroDriveSteps:
             btn_siguiente = HtmlActions.webdriver_wait_presence_of_element_located(webdriver_test_ux, 6, id='send')
             HtmlActions.click_html_element(btn_siguiente, id='send')
 
-            # btn_ingreso_cuenta = HtmlActions.webdriver_wait_element_to_be_clickable(
-            #     webdriver_test_ux, 6, xpath=const_claro_drive.INICIO_SESION_XPATH_BTN_INICIAR_SESION)
-            # HtmlActions.click_html_element(
-            #     btn_ingreso_cuenta, xpath=const_claro_drive.INICIO_SESION_XPATH_BTN_INICIAR_SESION)
-
             # inicia el tiempo de inicio
             tiempo_step_inicio = Temporizador.obtener_tiempo_timer()
 
@@ -150,7 +145,7 @@ class EvaluacionesClaroDriveSteps:
     @staticmethod
     def carga_archivo_claro_drive(webdriver_test_ux: WebDriver, path_archivo_carga: str, json_eval):
 
-        tiempo_step_inicio = Temporizador.obtener_tiempo_timer()
+        tiempo_step_inicio = None
         fecha_inicio = Temporizador.obtener_fecha_tiempo_actual()
 
         # verifica que se haya iniciado sesion correctamente
@@ -162,26 +157,28 @@ class EvaluacionesClaroDriveSteps:
             return json_eval
 
         try:
-            boton_crear = HtmlActions.webdriver_wait_element_to_be_clickable(
+            HtmlActions.webdriver_wait_element_to_be_clickable(
                 webdriver_test_ux, 10, class_name=const_claro_drive.CARGA_ARCHIVO_CLASS_NAME_BTN_CREATE_RESOURCE)
-
-            HtmlActions.click_html_element(
-                boton_crear, class_name=const_claro_drive.CARGA_ARCHIVO_CLASS_NAME_BTN_CREATE_RESOURCE)
 
             HtmlActions.webdriver_wait_presence_of_element_located(
                 webdriver_test_ux, 180, class_name=const_claro_drive.CARGA_ARCHIVO_CLASS_NAME_FILE_NAME_READER)
 
-            HtmlActions.webdriver_wait_presence_of_element_located(webdriver_test_ux, 35, id='quota-wrapper')
+            HtmlActions.webdriver_wait_presence_of_element_located(webdriver_test_ux, 60, class_name='Recent')
+
+            HtmlActions.webdriver_wait_presence_of_element_located(webdriver_test_ux, 50, id='quota-wrapper')
 
             input_file = HtmlActions.webdriver_wait_presence_of_element_located(
-                webdriver_test_ux, 35, id=const_claro_drive.CARGA_ARCHIVO_ID_INPUT_FILE_START)
+                webdriver_test_ux, 50, id=const_claro_drive.CARGA_ARCHIVO_ID_INPUT_FILE_START)
 
             HtmlActions.enviar_data_keys(
                 input_file, path_archivo_carga, id=const_claro_drive.CARGA_ARCHIVO_ID_INPUT_FILE_START)
 
             #ValidacionesHtml.verificar_ventana_archivo_duplicado(webdriver_test_ux)
 
-            UtilsEvaluaciones.esperar_carga_total_de_archivo(webdriver_test_ux)
+            tiempo_step_inicio = UtilsEvaluaciones.esperar_carga_total_de_archivo(
+                webdriver_test_ux, tiempo_step_inicio)
+
+            print('tiempo step inicio dentro de la funcion: {}'.format(tiempo_step_inicio))
 
             HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
 

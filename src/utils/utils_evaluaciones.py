@@ -1,7 +1,8 @@
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotInteractableException
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.remote.webdriver import WebDriver, WebElement
+from selenium.webdriver.remote.webdriver import WebDriver
+from src.utils.utils_temporizador import Temporizador
 
 import src.validaciones_json.constantes_json as contantes_json
 from src.utils.utils_format import FormatUtils
@@ -121,8 +122,9 @@ class UtilsEvaluaciones:
                 break
 
     @staticmethod
-    def esperar_carga_total_de_archivo(webdriver: WebDriver, tiempo_de_espera: int = 720):
-        tiempo_de_inicio = Temporizador.obtener_tiempo_timer()
+    def esperar_carga_total_de_archivo(webdriver: WebDriver, tiempo_step_inicio, tiempo_de_espera: int = 720):
+        tiempo_inicial_ejecucion_de_funcion = Temporizador.obtener_tiempo_timer()
+        tiempo_step_inicio = Temporizador.obtener_tiempo_timer()
         tiempo_transcurrido = 0
         se_cargo_correctamente_el_fichero = False
         mensaje_exception = 'Han transcurrido mas de 12 minutos, sin cargar correctamente el archivo dentro del ' \
@@ -132,7 +134,7 @@ class UtilsEvaluaciones:
         while tiempo_transcurrido < tiempo_de_espera:
             # en cada iteracion espera al menos un segundo
             time.sleep(1)
-            tiempo_transcurrido = Temporizador.obtener_tiempo_timer() - tiempo_de_inicio
+            tiempo_transcurrido = Temporizador.obtener_tiempo_timer() - tiempo_inicial_ejecucion_de_funcion
             modal_de_exito = webdriver.find_elements_by_xpath('//div[@class="up-file-actions isDone"]')
             modal_archivo_duplicado = webdriver.find_elements_by_class_name('oc-dialog')
 
@@ -174,7 +176,9 @@ class UtilsEvaluaciones:
                 if len(mensaje_de_carga) > 0:
                     mensaje_de_carga = mensaje_de_carga[0]
 
-                    if 'Se ha cancelado la carga' in mensaje_de_carga.text:
+                    if 'Se ha cancelado la carga' in mensaje_de_carga.text \
+                            or '1 Subida en pausa' in mensaje_de_carga.text:
+
                         numero_de_cancelaciones_de_descargas = numero_de_cancelaciones_de_descargas + 1
                         print('numero de cancelaciones: {}'.format(numero_de_cancelaciones_de_descargas))
 
@@ -187,8 +191,10 @@ class UtilsEvaluaciones:
 
                             HtmlActions.click_html_element(boton_reupload, class_name='ResumeUploadOption')
                             print('se dio click')
+                            tiempo_step_inicio = Temporizador.obtener_tiempo_timer()
                             time.sleep(1)
 
+                            continue
                         except ElementNotInteractableException:
                             continue
                         except NoSuchElementException:
@@ -209,5 +215,8 @@ class UtilsEvaluaciones:
             UtilsEvaluaciones.esperar_desaparicion_modal_exito(webdriver)
         else:
             raise TimeoutException(msg=mensaje_exception)
+
+        print('tiempo step inicio dentro de la funcion: {}'.format(tiempo_step_inicio))
+        return tiempo_step_inicio
 
 
