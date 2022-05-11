@@ -178,6 +178,24 @@ class UtilsEvaluaciones:
                         numero_de_cancelaciones_de_descargas = numero_de_cancelaciones_de_descargas + 1
                         print('numero de cancelaciones: {}'.format(numero_de_cancelaciones_de_descargas))
 
+                        print('se procede a dar clic en el boton de reupload')
+
+                        try:
+
+                            boton_reupload = HtmlActions.webdriver_wait_element_to_be_clickable(
+                                webdriver, class_name='ResumeUploadOption')
+
+                            HtmlActions.click_html_element(boton_reupload, class_name='ResumeUploadOption')
+                            print('se dio click')
+                            time.sleep(1)
+
+                        except ElementNotInteractableException:
+                            continue
+                        except NoSuchElementException:
+                            continue
+                        except TimeoutException:
+                            continue
+
                     if numero_de_cancelaciones_de_descargas > 10:
                         se_cargo_correctamente_el_fichero = False
                         mensaje_exception = 'Ha sucedido un error durante la carga del archivo, se presenta el ' \
