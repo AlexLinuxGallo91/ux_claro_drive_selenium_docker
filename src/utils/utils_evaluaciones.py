@@ -182,6 +182,9 @@ class UtilsEvaluaciones:
                         se_cargo_correctamente_el_fichero = False
                         mensaje_exception = 'Ha sucedido un error durante la carga del archivo, se presenta el ' \
                                             'siguiente mensaje: {}'.format(mensaje_de_carga.text)
+                        #DEBUG
+                        path_debug_img = '/home/trjlha/scripts/ux/clarodrive/debug_screenshots/debug.png'
+                        webdriver.save_screenshot(path_debug_img)
                         break
 
         if se_cargo_correctamente_el_fichero:
