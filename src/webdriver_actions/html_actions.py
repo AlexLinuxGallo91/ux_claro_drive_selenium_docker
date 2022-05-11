@@ -281,6 +281,8 @@ class HtmlActions:
 
             contador_intentos = contador_intentos + 1
 
+            print('intento de clic numero: {}'.format(contador_intentos))
+
             try:
                 HtmlActions.click_html_element(elemento_html, id, class_name, xpath, name)
                 break
