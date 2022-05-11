@@ -86,7 +86,7 @@ class UtilsMain:
         shutil.rmtree(path=path_directorio_por_borrar, ignore_errors=True)
 
     @staticmethod
-    def depurar_carpeta_de_descargas(path_carpeta_descargas:str, segundos_a_verificar:int = 7200):
+    def depurar_carpeta_de_descargas(path_carpeta_descargas: str, segundos_a_verificar: int = 7200):
 
         lista_carpetas_por_eliminar = UtilsMain.obtener_lista_folders_en_directorio(path_carpeta_descargas)
         fecha_actual = datetime.datetime.now()

@@ -146,7 +146,7 @@ class UtilsEvaluaciones:
                     modal_archivo_duplicado = webdriver.find_element_by_class_name('oc-dialog')
 
                     check_box_all_files = HtmlActions.webdriver_wait_presence_of_element_located(
-                        modal_archivo_duplicado,5,
+                        modal_archivo_duplicado, 5,
                         xpath='//label[@for="checkbox-allnewfiles"][text()="Archivos Nuevos"]')
 
                     HtmlActions.click_html_element(
@@ -168,7 +168,7 @@ class UtilsEvaluaciones:
                 except ElementClickInterceptedException:
                     continue
 
-            #print('entrando al header')
+            # print('entrando al header')
             header = webdriver.find_elements_by_class_name('up-header')
 
             if len(header) > 0:
@@ -210,9 +210,9 @@ class UtilsEvaluaciones:
                         se_cargo_correctamente_el_fichero = False
                         mensaje_exception = 'Ha sucedido un error durante la carga del archivo, se presenta el ' \
                                             'siguiente mensaje: {}'.format(mensaje_de_carga.text)
-                        #DEBUG
-                        path_debug_img = '/home/trjlha/scripts/ux/clarodrive/debug_screenshots/debug.png'
-                        webdriver.save_screenshot(path_debug_img)
+                        # # DEBUG
+                        # path_debug_img = '/home/trjlha/scripts/ux/clarodrive/debug_screenshots/debug.png'
+                        # webdriver.save_screenshot(path_debug_img)
                         break
 
         if se_cargo_correctamente_el_fichero:
@@ -222,5 +222,3 @@ class UtilsEvaluaciones:
 
         # print('tiempo step inicio dentro de la funcion: {}'.format(tiempo_step_inicio))
         return tiempo_step_inicio
-
-
