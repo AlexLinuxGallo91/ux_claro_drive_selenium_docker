@@ -1,6 +1,7 @@
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotInteractableException
 from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.remote.webdriver import WebDriver
 from src.utils.utils_temporizador import Temporizador
 
@@ -164,6 +165,8 @@ class UtilsEvaluaciones:
                 except NoSuchElementException:
                     continue
                 except TimeoutException:
+                    continue
+                except ElementClickInterceptedException:
                     continue
 
             #print('entrando al header')
