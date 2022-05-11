@@ -348,8 +348,10 @@ class EvaluacionesClaroDriveSteps:
             boton_sub_menu_actions = HtmlActions.webdriver_wait_presence_of_element_located(
                 archivo_localizado_por_descargar, 20, class_name='open-menu')
 
-            # se realiza un clic en el boton del submenu
-            HtmlActions.click_html_element(boton_sub_menu_actions, class_name='open-menu')
+            # se realiza un clic en el boton del submenu (en caso de fallar, se hacen dos intentos mas)
+            HtmlActions.click_en_elemento_html_con_intentos(
+                boton_sub_menu_actions, numero_de_intentos=3, class_name='open-menu')
+            #HtmlActions.click_html_element(boton_sub_menu_actions, class_name='open-menu')
 
             # se busca el boton de eliminar, el cual contiene el submenu
             boton_eliminar = HtmlActions.webdriver_wait_presence_of_element_located(

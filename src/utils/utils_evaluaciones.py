@@ -3,7 +3,6 @@ from selenium.common.exceptions import ElementNotInteractableException
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.remote.webdriver import WebDriver
-from src.utils.utils_temporizador import Temporizador
 
 import src.validaciones_json.constantes_json as contantes_json
 from src.utils.utils_format import FormatUtils
