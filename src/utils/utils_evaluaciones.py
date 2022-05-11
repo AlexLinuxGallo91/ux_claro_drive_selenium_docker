@@ -127,6 +127,7 @@ class UtilsEvaluaciones:
         se_cargo_correctamente_el_fichero = False
         mensaje_exception = 'Han transcurrido mas de 12 minutos, sin cargar correctamente el archivo dentro del ' \
                             'portal de Claro Drive'
+        numero_de_cancelaciones_de_descargas = 0
 
         while tiempo_transcurrido < tiempo_de_espera:
             # en cada iteracion espera al menos un segundo
@@ -174,6 +175,10 @@ class UtilsEvaluaciones:
                     mensaje_de_carga = mensaje_de_carga[0]
 
                     if 'Se ha cancelado la carga' in mensaje_de_carga.text:
+                        numero_de_cancelaciones_de_descargas = numero_de_cancelaciones_de_descargas + 1
+                        print('numero de cancelaciones: {}'.format(numero_de_cancelaciones_de_descargas))
+
+                    if numero_de_cancelaciones_de_descargas > 10:
                         se_cargo_correctamente_el_fichero = False
                         mensaje_exception = 'Ha sucedido un error durante la carga del archivo, se presenta el ' \
                                             'siguiente mensaje: {}'.format(mensaje_de_carga.text)
