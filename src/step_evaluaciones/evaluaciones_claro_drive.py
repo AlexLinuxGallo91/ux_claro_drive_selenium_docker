@@ -179,7 +179,7 @@ class EvaluacionesClaroDriveSteps:
             HtmlActions.enviar_data_keys(
                 input_file, path_archivo_carga, id=const_claro_drive.CARGA_ARCHIVO_ID_INPUT_FILE_START)
 
-            ValidacionesHtml.verificar_ventana_archivo_duplicado(webdriver_test_ux)
+            #ValidacionesHtml.verificar_ventana_archivo_duplicado(webdriver_test_ux)
 
             UtilsEvaluaciones.esperar_carga_total_de_archivo(webdriver_test_ux)
 

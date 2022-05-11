@@ -1,4 +1,5 @@
-from selenium.common.exceptions import ElementClickInterceptedException
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import ElementNotInteractableException
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.remote.webdriver import WebDriver, WebElement
 
@@ -132,11 +133,37 @@ class UtilsEvaluaciones:
             time.sleep(1)
             tiempo_transcurrido = Temporizador.obtener_tiempo_timer() - tiempo_de_inicio
             modal_de_exito = webdriver.find_elements_by_xpath('//div[@class="up-file-actions isDone"]')
+            modal_archivo_duplicado = webdriver.find_elements_by_class_name('oc-dialog')
 
             if len(modal_de_exito) == 1:
                 se_cargo_correctamente_el_fichero = True
                 break
+            elif len(modal_archivo_duplicado) > 0:
+                try:
+                    modal_archivo_duplicado = webdriver.find_element_by_class_name('oc-dialog')
 
+                    check_box_all_files = HtmlActions.webdriver_wait_presence_of_element_located(
+                        modal_archivo_duplicado,5,
+                        xpath='//label[@for="checkbox-allnewfiles"][text()="Archivos Nuevos"]')
+
+                    HtmlActions.click_html_element(
+                        check_box_all_files, xpath='//label[@for="checkbox-allnewfiles"][text()="Archivos Nuevos"]')
+
+                    boton_continuar = HtmlActions.webdriver_wait_element_to_be_clickable(
+                        modal_archivo_duplicado, class_name='continue')
+
+                    HtmlActions.click_html_element(boton_continuar, class_name='continue')
+
+                    HtmlActions.webdriver_wait_until_not_presence_of_element_located(webdriver, class_name='oc-dialog')
+                    continue
+                except ElementNotInteractableException:
+                    continue
+                except NoSuchElementException:
+                    continue
+                except TimeoutException:
+                    continue
+
+            print('entrando al header')
             header = webdriver.find_elements_by_class_name('up-header')
 
             if len(header) > 0:

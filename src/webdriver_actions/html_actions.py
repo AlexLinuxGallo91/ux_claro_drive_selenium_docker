@@ -349,13 +349,13 @@ class HtmlActions:
     @staticmethod
     def verificar_display_flex_modal_mensaje_de_exito(web_driver: WebDriver):
         try:
-            modal_de_exito = web_driver.find_element_by_id('notification')
-            display = modal_de_exito.value_of_css_property('display')
+            while True:
+                lista_div_containers = web_driver.find_elements_by_class_name('NotificationContainer')
 
-            while display == 'flex':
-                modal_de_exito = web_driver.find_element_by_id('notification')
-                display = modal_de_exito.value_of_css_property('display')
-
+                if len(lista_div_containers) > 0:
+                    pass
+                elif len(lista_div_containers) == 0:
+                    break
         except NoSuchElementException:
             pass
 
