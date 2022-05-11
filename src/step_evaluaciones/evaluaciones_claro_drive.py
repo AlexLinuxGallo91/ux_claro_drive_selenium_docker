@@ -178,7 +178,7 @@ class EvaluacionesClaroDriveSteps:
             tiempo_step_inicio = UtilsEvaluaciones.esperar_carga_total_de_archivo(
                 webdriver_test_ux, tiempo_step_inicio)
 
-            print('tiempo step inicio dentro de la funcion: {}'.format(tiempo_step_inicio))
+            # print('tiempo step inicio afuera de la funcion: {}'.format(tiempo_step_inicio))
 
             HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
 
