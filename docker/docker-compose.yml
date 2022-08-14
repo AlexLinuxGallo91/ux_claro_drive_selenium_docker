@@ -1,8 +1,0 @@
-version: "3.9"
-services:
-  selenium_claro_drive:
-    build: .
-    image: selenium_claro_drive:latest
-    ports:
-      - "7900:7900"
-    shm_size: '2gb'
