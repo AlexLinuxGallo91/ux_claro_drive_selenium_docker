@@ -12,6 +12,8 @@ RUN chmod 777 -R /app/downloads
 
 RUN sudo apt-get install -y python3-pip
 RUN sudo pip3 install virtualenv
+RUN pwd
+RUN ls -la
 RUN cd /app && virtualenv env && \
     /app/env/bin/pip3 install -r requirements.txt && \
     fallocate -l 25MB img25mb.png
