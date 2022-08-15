@@ -3,7 +3,6 @@ JSON_ARG_USER = 'user'
 JSON_ARG_PASSWORD = 'password'
 
 # ingreso_pagina_principal_claro_drive
-
 MSG_OUTPUT_INGRESO_PAGINA_PRINCIPAL_EXITOSO = 'Se ingresa correctamente a la pagina principal de Claro Drive'
 MSG_OUTPUT_INGRESO_PAGINA_PRINCIPAL_SIN_EXITO = 'fue imposible ingresar principal de Claro Drive: {}'
 

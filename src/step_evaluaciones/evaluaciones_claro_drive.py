@@ -13,7 +13,6 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from src.step_evaluaciones import constantes_evaluaciones_claro_drive as const_claro_drive
 from src.utils.utils_evaluaciones import UtilsEvaluaciones
 from src.utils.utils_format import FormatUtils
-from src.utils.utils_html import ValidacionesHtml
 from src.utils.utils_temporizador import Temporizador
 from src.webdriver_actions.html_actions import HtmlActions
 
@@ -173,12 +172,8 @@ class EvaluacionesClaroDriveSteps:
             HtmlActions.enviar_data_keys(
                 input_file, path_archivo_carga, id=const_claro_drive.CARGA_ARCHIVO_ID_INPUT_FILE_START)
 
-            #ValidacionesHtml.verificar_ventana_archivo_duplicado(webdriver_test_ux)
-
             tiempo_step_inicio = UtilsEvaluaciones.esperar_carga_total_de_archivo(
                 webdriver_test_ux, tiempo_step_inicio)
-
-            # print('tiempo step inicio afuera de la funcion: {}'.format(tiempo_step_inicio))
 
             HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
 
@@ -276,9 +271,9 @@ class EvaluacionesClaroDriveSteps:
 
             HtmlActions.click_html_element(boton_descargar, xpath='//li[@class="download action"]')
 
-            HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
-
             tiempo_step_inicio = Temporizador.obtener_tiempo_timer()
+
+            HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
 
             UtilsEvaluaciones.verificar_descarga_en_ejecucion(nombre_archivo_sin_ext, ext_archivo)
 
@@ -351,7 +346,6 @@ class EvaluacionesClaroDriveSteps:
             # se realiza un clic en el boton del submenu (en caso de fallar, se hacen dos intentos mas)
             HtmlActions.click_en_elemento_html_con_intentos(
                 boton_sub_menu_actions, numero_de_intentos=3, class_name='open-menu')
-            #HtmlActions.click_html_element(boton_sub_menu_actions, class_name='open-menu')
 
             # se busca el boton de eliminar, el cual contiene el submenu
             boton_eliminar = HtmlActions.webdriver_wait_presence_of_element_located(
@@ -366,7 +360,10 @@ class EvaluacionesClaroDriveSteps:
 
             # se empieza a tomar el tiempo de duracion de la eliminacion del archivo
             tiempo_step_inicio = Temporizador.obtener_tiempo_timer()
-            UtilsEvaluaciones.esperar_aparicion_modal_de_exito(webdriver_test_ux)
+
+            # verifica que aparezca el mensaje de que no existe el archivo encontrado
+            HtmlActions.webdriver_wait_presence_of_element_located(
+                webdriver_test_ux, 20, class_name='title')
 
             # se establecen los resultados exitosos en el json
             json_eval = UtilsEvaluaciones.establecer_output_status_step(

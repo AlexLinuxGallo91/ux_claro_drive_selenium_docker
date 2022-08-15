@@ -168,7 +168,6 @@ class UtilsEvaluaciones:
                 except ElementClickInterceptedException:
                     continue
 
-            # print('entrando al header')
             header = webdriver.find_elements_by_class_name('up-header')
 
             if len(header) > 0:
@@ -182,9 +181,6 @@ class UtilsEvaluaciones:
                             or '1 Subida en pausa' in mensaje_de_carga.text:
 
                         numero_de_cancelaciones_de_descargas = numero_de_cancelaciones_de_descargas + 1
-                        # print('numero de cancelaciones: {}'.format(numero_de_cancelaciones_de_descargas))
-                        #
-                        # print('se procede a dar clic en el boton de reupload')
 
                         try:
 
@@ -192,7 +188,6 @@ class UtilsEvaluaciones:
                                 webdriver, class_name='ResumeUploadOption')
 
                             HtmlActions.click_html_element(boton_reupload, class_name='ResumeUploadOption')
-                            # print('se dio click')
                             tiempo_step_inicio = Temporizador.obtener_tiempo_timer()
                             time.sleep(1)
 
@@ -210,9 +205,6 @@ class UtilsEvaluaciones:
                         se_cargo_correctamente_el_fichero = False
                         mensaje_exception = 'Ha sucedido un error durante la carga del archivo, se presenta el ' \
                                             'siguiente mensaje: {}'.format(mensaje_de_carga.text)
-                        # # DEBUG
-                        # path_debug_img = '/home/trjlha/scripts/ux/clarodrive/debug_screenshots/debug.png'
-                        # webdriver.save_screenshot(path_debug_img)
                         break
 
         if se_cargo_correctamente_el_fichero:
@@ -220,5 +212,4 @@ class UtilsEvaluaciones:
         else:
             raise TimeoutException(msg=mensaje_exception)
 
-        # print('tiempo step inicio dentro de la funcion: {}'.format(tiempo_step_inicio))
         return tiempo_step_inicio
