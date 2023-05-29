@@ -164,7 +164,7 @@ class EvaluacionesClaroDriveSteps:
 
             HtmlActions.webdriver_wait_presence_of_element_located(webdriver_test_ux, 60, class_name='Recent')
 
-            HtmlActions.webdriver_wait_presence_of_element_located(webdriver_test_ux, 50, id='quota-wrapper')
+            # HtmlActions.webdriver_wait_presence_of_element_located(webdriver_test_ux, 50, id='quota-wrapper')
 
             input_file = HtmlActions.webdriver_wait_presence_of_element_located(
                 webdriver_test_ux, 50, id=const_claro_drive.CARGA_ARCHIVO_ID_INPUT_FILE_START)
