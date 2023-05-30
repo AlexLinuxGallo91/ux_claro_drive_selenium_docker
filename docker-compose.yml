@@ -1,8 +1,11 @@
 version: "3.9"
 services:
-  selenium_claro_drive:
+  selenium_claro_drive_i0004:
     build: .
-    image: selenium_claro_drive:latest
+    image: selenium_claro_drive_i0004:latest
     ports:
       - "7900:7900"
+    volumes:
+      - ./screenshots:/screenshots
+      - /etc/localtime:/etc/localtime:ro
     shm_size: '2gb'

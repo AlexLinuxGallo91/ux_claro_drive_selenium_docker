@@ -5,6 +5,7 @@ from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.remote.webdriver import WebDriver
 
 import src.validaciones_json.constantes_json as contantes_json
+from src.step_evaluaciones import constantes_evaluaciones_claro_drive as const_claro_drive
 from src.utils.utils_format import FormatUtils
 from src.utils.utils_main import UtilsMain
 from src.utils.utils_temporizador import Temporizador
@@ -122,13 +123,15 @@ class UtilsEvaluaciones:
                 break
 
     @staticmethod
-    def esperar_carga_total_de_archivo(webdriver: WebDriver, tiempo_step_inicio, tiempo_de_espera: int = 720):
+    def esperar_carga_total_de_archivo(webdriver: WebDriver, tiempo_step_inicio, tiempo_de_espera: int = 720,
+                                       path_file_upload=''):
+        minutos = tiempo_de_espera / 60
         tiempo_inicial_ejecucion_de_funcion = Temporizador.obtener_tiempo_timer()
         tiempo_step_inicio = Temporizador.obtener_tiempo_timer()
         tiempo_transcurrido = 0
         se_cargo_correctamente_el_fichero = False
-        mensaje_exception = 'Han transcurrido mas de 12 minutos, sin cargar correctamente el archivo dentro del ' \
-                            'portal de Claro Drive'
+        mensaje_exception = 'Han transcurrido mas de {} minutos, sin cargar correctamente el archivo dentro del ' \
+                            'portal de Claro Drive'.format(str(minutos))
         numero_de_cancelaciones_de_descargas = 0
 
         while tiempo_transcurrido < tiempo_de_espera:
@@ -184,24 +187,23 @@ class UtilsEvaluaciones:
 
                         try:
 
-                            boton_reupload = HtmlActions.webdriver_wait_element_to_be_clickable(
-                                webdriver, class_name='ResumeUploadOption')
+                            input_file = HtmlActions.webdriver_wait_presence_of_element_located(
+                                webdriver, 5, id=const_claro_drive.CARGA_ARCHIVO_ID_INPUT_FILE_START)
 
-                            HtmlActions.click_html_element(boton_reupload, class_name='ResumeUploadOption')
-                            tiempo_step_inicio = Temporizador.obtener_tiempo_timer()
+                            HtmlActions.enviar_data_keys(
+                                input_file, path_file_upload, id=const_claro_drive.CARGA_ARCHIVO_ID_INPUT_FILE_START)
+
                             time.sleep(1)
-
-                            continue
                         except ElementNotInteractableException:
-                            continue
+                            pass
                         except NoSuchElementException:
-                            continue
+                            pass
                         except TimeoutException:
-                            continue
+                            pass
                         except ElementClickInterceptedException:
-                            continue
+                            pass
 
-                    if numero_de_cancelaciones_de_descargas > 10:
+                    if numero_de_cancelaciones_de_descargas > 4:
                         se_cargo_correctamente_el_fichero = False
                         mensaje_exception = 'Ha sucedido un error durante la carga del archivo, se presenta el ' \
                                             'siguiente mensaje: {}'.format(mensaje_de_carga.text)
