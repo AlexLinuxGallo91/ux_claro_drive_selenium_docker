@@ -173,7 +173,7 @@ class EvaluacionesClaroDriveSteps:
                 input_file, path_archivo_carga, id=const_claro_drive.CARGA_ARCHIVO_ID_INPUT_FILE_START)
 
             tiempo_step_inicio = UtilsEvaluaciones.esperar_carga_total_de_archivo(
-                webdriver_test_ux, tiempo_step_inicio, tiempo_de_espera=60, path_file_upload=path_archivo_carga)
+                webdriver_test_ux, tiempo_step_inicio, tiempo_de_espera=120, path_file_upload=path_archivo_carga)
 
             HtmlActions.verificar_display_flex_modal_mensaje_de_exito(webdriver_test_ux)
 
