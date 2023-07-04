@@ -1,8 +1,8 @@
 version: "3.9"
 services:
-  selenium_claro_drive_i0000:
+  selenium_claro_drive_i0002:
     build: .
-    image: selenium_claro_drive_i0000:latest
+    image: selenium_claro_drive_i0002:latest
     ports:
       - "7900:7900"
     volumes:
