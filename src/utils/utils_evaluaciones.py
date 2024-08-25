@@ -138,7 +138,7 @@ class UtilsEvaluaciones:
             # en cada iteracion espera al menos un segundo
             time.sleep(1)
             tiempo_transcurrido = Temporizador.obtener_tiempo_timer() - tiempo_inicial_ejecucion_de_funcion
-            modal_de_exito = webdriver.find_elements_by_xpath('//div[@class="up-file-actions isDone"]')
+            modal_de_exito = webdriver.find_elements_by_xpath("//div[contains(@class, 'up-file-actions') and contains(@class, 'isDone')]")
             modal_archivo_duplicado = webdriver.find_elements_by_class_name('oc-dialog')
 
             if len(modal_de_exito) == 1:
