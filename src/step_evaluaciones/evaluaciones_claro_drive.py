@@ -363,7 +363,7 @@ class EvaluacionesClaroDriveSteps:
 
             # verifica que aparezca el mensaje de que no existe el archivo encontrado
             HtmlActions.webdriver_wait_presence_of_element_located(
-                webdriver_test_ux, 20, class_name='title')
+                webdriver_test_ux, 20, class_name='Message')
 
             # se establecen los resultados exitosos en el json
             json_eval = UtilsEvaluaciones.establecer_output_status_step(
